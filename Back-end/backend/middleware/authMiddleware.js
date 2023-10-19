@@ -4,7 +4,7 @@ const authMiddleware = (req, res, next) => {
   // Obtener el token de autorización del encabezado de la solicitud
   const authHeader = req.headers.authorization;
   if (!authHeader) {
-    return res.status(401).json({ error: 'No se proporcionó un token de autorización' });
+    return res.status(404).json({ error: 'No se proporcionó un token de autorización' });
   }
 
   try {
@@ -18,8 +18,8 @@ const authMiddleware = (req, res, next) => {
     // Continuar con el siguiente middleware o controlador
     next();
   } catch (error) {
-    return res.status(401).json({ error: 'Token de autorización inválido' });
+    return res.status(404).json({ error: 'Token de autorización inválido' });
   }
 };
 
-module.exports = authMiddleware;
+module.exports = { authMiddleware } 

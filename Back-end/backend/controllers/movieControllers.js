@@ -49,5 +49,5 @@ module.exports = {
   getAllMovies,
   createMovie,
   updateMovie,
-  deleteMovie,
-};
+  deleteMovie
+}

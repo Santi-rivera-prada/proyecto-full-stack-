@@ -27,4 +27,4 @@ const movieSchema = new mongoose.Schema({
 // Crear el modelo de películas a partir del esquema definido
 const Movie = mongoose.model('Movie', movieSchema);
 
-module.exports = Movie;
+module.exports = Movie

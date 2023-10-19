@@ -1,5 +1,5 @@
 // Importar el modelo de usuarios
-const User = require('../models/usersModel.js');
+const User = require('../models/usersModel');
 
 // Controlador para registrar un usuario
 const registerUser = async (req, res) => {
@@ -68,5 +68,5 @@ module.exports = {
   loginUser,
   getUser,
   updateUser,
-  deleteUser,
-};
+  deleteUser
+}
