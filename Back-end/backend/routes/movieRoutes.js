@@ -1,17 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const movieController = require('../controllers/movieControllers');
+const authenticate = require('../middleware/authMiddleware');
+
+// Ruta para crear una nueva película
+router.post('/movies', authenticate, movieController.createMovie);
 
 // Ruta para obtener todas las películas
-router.get('/', movieController.getAllMovies);
+router.get('/movies', movieController.getAllMovies);
 
-// Ruta para crear una película
-router.post('/', movieController.createMovie);
+// Ruta para obtener una película por su ID
+router.get('/movies/:id', movieController.getMovie);
 
 // Ruta para actualizar una película por su ID
-router.put('/:id', movieController.updateMovie);
+router.put('/movies/:id', authenticate, movieController.updateMovie);
 
 // Ruta para eliminar una película por su ID
-router.delete('/:id', movieController.deleteMovie);
+router.delete('/movies/:id', authenticate, movieController.deleteMovie);
 
-module.exports = router
+module.exports = router;

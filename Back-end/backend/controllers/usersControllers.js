@@ -1,72 +1,73 @@
-// Importar el modelo de usuarios
 const User = require('../models/usersModel');
 
-// Controlador para registrar un usuario
-const registerUser = async (req, res) => {
+// Controlador para crear un nuevo usuario
+exports.createUser = async (req, res) => {
   try {
-    const user = new User(req.body);
+    const { name, email, password } = req.body;
+    const user = new User({ name, email, password });
     await user.save();
-    res.json(user);
+    res.status(201).json(user);
   } catch (error) {
-    res.status(500).json({ error: 'Error al registrar el usuario' });
+    console.error('Error al crear el usuario:', error);
+    res.status(500).send('Error interno del servidor');
   }
 };
 
-// Controlador para iniciar sesión de un usuario
-const loginUser = async (req, res) => {
+// Controlador para autenticar un usuario
+exports.authenticateUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-
-    if (!user || !user.comparePassword(password)) {
-      res.status(401).json({ error: 'Credenciales inválidas' });
-      return;
+    if (!user || user.password !== password) {
+      return res.status(401).send('Credenciales inválidas');
     }
-
-    res.json({ message: 'Inicio de sesión exitoso' });
+    // Aquí puedes generar un token de autenticación si es necesario
+    res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ error: 'Error al iniciar sesión' });
+    console.error('Error al autenticar al usuario:', error);
+    res.status(500).send('Error interno del servidor');
   }
 };
 
-// Controlador para obtener información de un usuario
-const getUser = async (req, res) => {
+// Controlador para obtener un usuario por su ID
+exports.getUser = async (req, res) => {
   try {
-    const { id } = req.params;
-    const user = await User.findById(id);
-    res.json(user);
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).send('Usuario no encontrado');
+    }
+    res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener el usuario' });
+    console.error('Error al obtener el usuario por ID:', error);
+    res.status(500).send('Error interno del servidor');
   }
 };
 
-// Controlador para actualizar información de un usuario
-const updateUser = async (req, res) => {
+// Controlador para actualizar un usuario por su ID
+exports.updateUser = async (req, res) => {
   try {
-    const { id } = req.params;
-    const user = await User.findByIdAndUpdate(id, req.body, { new: true });
-    res.json(user);
+    const { name, email, password } = req.body;
+    const user = await User.findByIdAndUpdate(req.params.id, { name, email, password }, { new: true });
+    if (!user) {
+      return res.status(404).send('Usuario no encontrado');
+    }
+    res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ error: 'Error al actualizar el usuario' });
+    console.error('Error al actualizar el usuario:', error);
+    res.status(500).send('Error interno del servidor');
   }
 };
 
-// Controlador para eliminar un usuario
-const deleteUser = async (req, res) => {
+// Controlador para eliminar un usuario por su ID
+exports.deleteUser = async (req, res) => {
   try {
-    const { id } = req.params;
-    await User.findByIdAndDelete(id);
-    res.json({ message: 'Usuario eliminado correctamente' });
+    const user = await User.findByIdAndRemove(req.params.id);
+    if (!user) {
+      return res.status(404).send('Usuario no encontrado');
+    }
+    res.status(200).send('Usuario eliminado');
   } catch (error) {
-    res.status(500).json({ error: 'Error al eliminar el usuario' });
+    console.error('Error al eliminar el usuario:', error);
+    res.status(500).send('Error interno del servidor');
   }
 };
-
-// Exportar los controladores
-module.exports = {
-  registerUser,
-  loginUser,
-  getUser,
-  updateUser,
-  deleteUser
-}

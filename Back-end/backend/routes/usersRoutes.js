@@ -1,20 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/usersControllers');
+const usersController = require('../controllers/usersControllers');
+const authenticate = require('../middleware/authMiddleware');
 
-// Ruta para registrar un usuario
-router.post('/register', userController.registerUser);
+// Ruta para registrar un nuevo usuario
+router.post('/users/register', usersController.createUser); // Cambiado a createUser
 
-// Ruta para iniciar sesión de un usuario
-router.post('/login', userController.loginUser);
+// Ruta para autenticar un usuario
+router.post('/users/login', usersController.authenticateUser); // Cambiado a authenticateUser
 
 // Ruta para obtener información de un usuario por su ID
-router.get('/:id', userController.getUser);
+router.get('/users/:id', authenticate, usersController.getUser);
 
-// Ruta para actualizar información de un usuario por su ID
-router.put('/:id', userController.updateUser);
+// Ruta para actualizar un usuario por su ID
+router.put('/users/:id', authenticate, usersController.updateUser);
 
 // Ruta para eliminar un usuario por su ID
-router.delete('/:id', userController.deleteUser);
+router.delete('/users/:id', authenticate, usersController.deleteUser);
 
-module.exports = router
+module.exports = router;
