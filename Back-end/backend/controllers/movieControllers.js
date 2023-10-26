@@ -1,68 +1,89 @@
+const asyncHandler = require('express-async-handler');
 const Movie = require('../models/movieModel');
 
-// Controlador para crear una nueva película
-exports.createMovie = async (req, res) => {
-  try {
-    const { title, director, year } = req.body;
-    const movie = new Movie({ title, director, year });
-    await movie.save();
-    res.status(201).json(movie);
-  } catch (error) {
-    console.error('Error al crear la película:', error);
-    res.status(500).send('Error interno del servidor');
-  }
-};
-
-// Controlador para listar todas las películas
-exports.getAllMovies = async (req, res) => {
-  try {
+const getMovies = asyncHandler(async (req, res) => {
     const movies = await Movie.find();
     res.status(200).json(movies);
-  } catch (error) {
-    console.error('Error al obtener la lista de películas:', error);
-    res.status(500).send('Error interno del servidor');
-  }
-};
+});
 
-// Controlador para obtener una película por su ID
-exports.getMovie = async (req, res) => {
-  try {
+const createMovie = asyncHandler(async (req, res) => {
+    const {
+        title,
+        director,
+        releaseYear,
+        likes,
+        adult,
+        backdrop_path,
+        genre_ids,
+        original_language,
+        original_title,
+        overview,
+        popularity,
+        poster_path,
+        release_date,
+        video,
+        vote_average,
+        vote_count
+    } = req.body;
+
+    if (!title || !director || !releaseYear) {
+        res.status(400);
+        throw new Error('Por favor completa los campos obligatorios');
+    }
+
+    const movie = await Movie.create({
+        title,
+        director,
+        releaseYear,
+        likes: likes || 0,
+        adult,
+        backdrop_path,
+        genre_ids,
+        original_language,
+        original_title,
+        overview,
+        popularity,
+        poster_path,
+        release_date,
+        video,
+        vote_average,
+        vote_count
+    });
+
+    res.status(201).json(movie);
+});
+
+const updateMovie = asyncHandler(async (req, res) => {
     const movie = await Movie.findById(req.params.id);
-    if (!movie) {
-      return res.status(404).send('Película no encontrada');
-    }
-    res.status(200).json(movie);
-  } catch (error) {
-    console.error('Error al obtener la película por ID:', error);
-    res.status(500).send('Error interno del servidor');
-  }
-};
 
-// Controlador para actualizar una película por su ID
-exports.updateMovie = async (req, res) => {
-  try {
-    const { title, director, year } = req.body;
-    const movie = await Movie.findByIdAndUpdate(req.params.id, { title, director, year }, { new: true });
     if (!movie) {
-      return res.status(404).send('Película no encontrada');
+        res.status(404);
+        throw new Error('La película no fue encontrada');
     }
-    res.status(200).json(movie);
-  } catch (error) {
-    console.error('Error al actualizar la película:', error);
-    res.status(500).send('Error interno del servidor');
-  }
-};
 
-// Controlador para eliminar una película por su ID
-exports.deleteMovie = async (req, res) => {
-  try {
-    const movie = await Movie.findByIdAndRemove(req.params.id);
+    // Puedes agregar una verificación adicional aquí para asegurarte de que solo los usuarios autorizados puedan editar la película
+
+    const updatedMovie = await Movie.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.status(200).json(updatedMovie);
+});
+
+const deleteMovie = asyncHandler(async (req, res) => {
+    const movie = await Movie.findById(req.params.id);
+
     if (!movie) {
-      return res.status(404).send('Película no encontrada');
+        res.status(404);
+        throw new Error('La película no fue encontrada');
     }
-    res.status(200).send('Película eliminada');
-  } catch (error) {
-    console.error('Error al eliminar la película:', error);
-    res.status(500).send('Error interno del servidor');
-  }
+
+    // Puedes agregar una verificación adicional aquí para asegurarte de que solo los usuarios autorizados puedan eliminar la película
+
+    await movie.remove();
+    res.status(200).json({ id: req.params.id });
+});
+
+module.exports = {
+    getMovies,
+    createMovie,
+    updateMovie,
+    deleteMovie
 };

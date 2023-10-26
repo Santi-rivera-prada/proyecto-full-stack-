@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Definir el esquema para el modelo de películas
+// Definir el esquema para la colección de películas
 const movieSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -10,18 +10,34 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  year: {
+  releaseYear: {
     type: Number,
     required: true,
   },
   likes: {
     type: Number,
-    default: 0, // El número de likes se inicializa en 0
+    default: 0,
   },
-  // Puedes agregar otros campos según tus necesidades
+  adult: {
+    type: Boolean,
+    required: true,
+  },
+  backdrop_path: String,
+  genre_ids: [Number],
+  original_language: String,
+  original_title: String,
+  overview: String,
+  popularity: Number,
+  poster_path: String,
+  release_date: String,
+  video: Boolean,
+  vote_average: Number,
+  vote_count: Number,
+}, {
+  timestamps: true, // Agrega marcas de tiempo (createdAt, updatedAt) automáticamente
 });
 
-// Crear el modelo de películas a partir del esquema
+// Crear el modelo de películas a partir del esquema definido
 const Movie = mongoose.model('Movie', movieSchema);
 
 module.exports = Movie;

@@ -1,28 +1,18 @@
 const mongoose = require('mongoose');
-require('dotenv').config();
+const dotenv = require('dotenv'); // Importa dotenv
 
-// Obtén la URI de conexión y el puerto desde el archivo .env
-const dbURI = process.env.MONGODB_URI;
-const port = process.env.PORT || 3000; // Si no se especifica un puerto en el archivo .env, se usará el puerto 3000
+dotenv.config(); // Carga las variables de entorno desde el archivo .env
 
-// Configura y conecta a la base de datos de MongoDB
-mongoose.connect(dbURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-});
+const connectDB = async () => {
+    try {
+    const conn = await mongoose.connect(process.env.MONGO_URI);
 
-// Manejador de eventos de conexión
-const db = mongoose.connection;
+    console.log(`MongoDB Connected: ${conn.connection.host}`.cyan.underline);
 
-db.on('error', (error) => {
-  console.error('Error de conexión a la base de datos:', error);
-});
+    } catch (error) {
+    console.log(error);
+    process.exit(1);
+    }
+};
 
-db.once('open', () => {
-  console.log('Conexión exitosa a la base de datos');
-  console.log(`Servidor en funcionamiento en el puerto ${port}`);
-});
-
-module.exports = connectDB
+module.exports = connectDB;
