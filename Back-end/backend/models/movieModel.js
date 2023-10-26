@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Definir el esquema para la colección de películas
 const movieSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -34,10 +33,9 @@ const movieSchema = new mongoose.Schema({
   vote_average: Number,
   vote_count: Number,
 }, {
-  timestamps: true, // Agrega marcas de tiempo (createdAt, updatedAt) automáticamente
+  timestamps: true,
 });
 
-// Crear el modelo de películas a partir del esquema definido
 const Movie = mongoose.model('Movie', movieSchema);
 
 module.exports = Movie;

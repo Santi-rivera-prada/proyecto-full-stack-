@@ -61,7 +61,6 @@ const updateMovie = asyncHandler(async (req, res) => {
         throw new Error('La película no fue encontrada');
     }
 
-    // Puedes agregar una verificación adicional aquí para asegurarte de que solo los usuarios autorizados puedan editar la película
 
     const updatedMovie = await Movie.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.status(200).json(updatedMovie);
@@ -74,8 +73,6 @@ const deleteMovie = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error('La película no fue encontrada');
     }
-
-    // Puedes agregar una verificación adicional aquí para asegurarte de que solo los usuarios autorizados puedan eliminar la película
 
     await movie.remove();
     res.status(200).json({ id: req.params.id });
