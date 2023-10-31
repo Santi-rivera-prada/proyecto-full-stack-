@@ -3,13 +3,13 @@ const User = require('../models/usersModel');
 // Controlador para crear un nuevo usuario
 exports.createUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
-    const user = new User({ name, email, password });
+    const { name, lastName, email, password, age } = req.body;
+    const user = new User({ name, lastName, email, password, age });
     await user.save();
     res.status(201).json(user);
   } catch (error) {
     console.error('Error al crear el usuario:', error);
-    res.status(500).send('Error interno del servidor');
+    res.status(500).send('Error interno del servidor XD');
   }
 };
 
@@ -46,8 +46,8 @@ exports.getUser = async (req, res) => {
 // Controlador para actualizar un usuario por su ID
 exports.updateUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
-    const user = await User.findByIdAndUpdate(req.params.id, { name, email, password }, { new: true });
+    const { name, lastName, email, password, age } = req.body;
+    const user = await User.findByIdAndUpdate(req.params.id, { name, lastName, email, password, age }, { new: true });
     if (!user) {
       return res.status(404).send('Usuario no encontrado');
     }
@@ -68,6 +68,17 @@ exports.deleteUser = async (req, res) => {
     res.status(200).send('Usuario eliminado');
   } catch (error) {
     console.error('Error al eliminar el usuario:', error);
+    res.status(500).send('Error interno del servidor');
+  }
+};
+
+// Controlador para obtener la lista de usuarios (sin autenticación)
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
+  } catch (error) {
+    console.error('Error al obtener la lista de usuarios:', error);
     res.status(500).send('Error interno del servidor');
   }
 };
