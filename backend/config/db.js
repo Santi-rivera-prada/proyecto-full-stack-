@@ -1,4 +1,4 @@
-//configuracion 
+//CONECCIÓN A LA BASE DE DATOS
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
