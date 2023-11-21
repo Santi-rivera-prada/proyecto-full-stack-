@@ -31,13 +31,7 @@ app.use('/api', userRoutes);
 const errorMiddleware = require('./middleware/errorMiddleware');
 app.use(errorMiddleware);
 
-const corsOptions = {
-  origin: 'http://localhost:5173', // local del frontend general de practica
-  methods: 'GET,PUT,POST,DELETE',
-  allowedHeaders: 'Content-Type,Authorization',
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.listen(PORT, () => {
   console.log(`Servidor en funcionamiento en el puerto ${PORT}`);
