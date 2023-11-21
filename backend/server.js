@@ -31,12 +31,10 @@ app.use('/api', userRoutes);
 const errorMiddleware = require('./middleware/errorMiddleware');
 app.use(errorMiddleware);
 
-app.use(cors());
-
 const corsOptions = {
-  origin: 'http://localhost:5173', // local del frontend general de practica 
+  origin: 'http://localhost:5173', // local del frontend general de practica
   methods: 'GET,PUT,POST,DELETE',
-  allowedHeaders: 'Access-Control-Allow-Origin',
+  allowedHeaders: 'Content-Type,Authorization',
 };
 
 app.use(cors(corsOptions));
