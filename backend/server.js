@@ -33,6 +33,8 @@ app.use(errorMiddleware);
 
 app.use(cors());
 
+app.use('/api', movieRoutes);
+
 app.listen(PORT, () => {
   console.log(`Servidor en funcionamiento en el puerto ${PORT}`);
 });
