@@ -36,7 +36,7 @@ app.use(cors());
 const corsOptions = {
   origin: 'http://localhost:5173', // local del frontend general de practica 
   methods: 'GET,PUT,POST,DELETE',
-  allowedHeaders: 'Content-Type,Authorization',
+  allowedHeaders: 'Access-Control-Allow-Origin',
 };
 
 app.use(cors(corsOptions));
