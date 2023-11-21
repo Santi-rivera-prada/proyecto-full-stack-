@@ -26,7 +26,19 @@ const userRoutes = require('./routes/usersRoutes');
 app.use('/api', movieRoutes);
 app.use('/api', userRoutes);
 
-app.use(cors()); // Habilita CORS sin restricciones
+const whitelist = ['http://localhost:5173'];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (whitelist.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+};
+
+app.use(cors(corsOptions)); // Habilita CORS solo para el origen especificado
 
 // Middleware de manejo de errores (debe ir al final)
 const errorMiddleware = require('./middleware/errorMiddleware');
