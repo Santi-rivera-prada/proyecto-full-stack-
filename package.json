@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "api-movies",
   "main": "server.js",
+  "proxy": "https://defiant-deer-undershirt.cyclic.app",
   "scripts": {
     "start": "node backend/server.js",
     "server": "nodemon backend/server.js"
